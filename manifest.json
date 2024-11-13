@@ -9,15 +9,16 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "/icon-192x192.png",
+            "src": "gojo1.jpg ",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "gojo1.jpg "
         },
         {
-            "src": "/icon-512x512.png",
+            "src": "gojo1.jpg ",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "gojo1.jpg "
         }
     ]
 }
+
 

@@ -2,31 +2,56 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>HTML</title>
+    <title>Tablas de Elementos de HTML</title>
+    
+    <!-- Vinculamos el manifiesto -->
     <link rel="manifest" href="/manifest.json">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Vinculamos Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
     <style type="text/css">
+        body {
+            background-image: url('gojo1.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .titulo-consistente {
+            font-size: 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            text-align: center;
+            z-index: 1000;
+            padding: 20px;
+            background-color: rgba(0, 123, 255, 0.8); /* Fondo azul semi-transparente */
+            color: white;
+        }
+
+        .content {
+            margin-top: 100px;
+        }
+
         table, tr, td {
             border: 1px solid rgb(202, 191, 29);
         }
-        /* Estilo para el título */
-        .titulo-consistente {
-            font-size: 2rem; /* Ajusta este tamaño según sea necesario */
-            position: fixed; /* Mantiene el título en una posición fija */
-            width: 100%; /* Para que ocupe todo el ancho */
-            top: 20px; /* Ajusta la posición vertical según necesites */
-            left: 0;
-            text-align: center; /* Centrar el texto */
-            z-index: 1000; /* Asegura que esté encima de otros elementos */
-        }
-        .content {
-            margin-top: 80px; /* Espacio para que no quede tapado por el título fijo */
+
+        /* Clase para las filas nuevas con fondo blanco */
+        .fila-blanca {
+            background-color: white;
         }
     </style>
 </head>
 <body>
-    <h2 class="titulo-consistente bg-info text-white p-2">Tablas de Elementos de HTML</h2>
+    <h2 class="titulo-consistente">Tablas de Elementos de HTML</h2>
     
     <div class="container content">
         <div class="row mt-3">
@@ -67,25 +92,41 @@
             let Materno = document.getElementById("captura2").value.trim();
             
             if (nombre === "" || Paterno === "" || Materno === "") {
-                alert("llena todo pedaso de bestia.");
+                alert("Llena todos los campos.");
                 return;
             }
 
             var tabla = document.getElementById("tabla").getElementsByTagName('tbody')[0];
             var nuevaFila = tabla.insertRow(-1);
+            nuevaFila.classList.add("fila-blanca"); // Aplica la clase para el fondo blanco
             nuevaFila.innerHTML = `
                 <td>${contador++}</td>
                 <td>${nombre}</td>
                 <td>${Paterno}</td>
                 <td>${Materno}</td>
-                <td><button class="btn btn-danger" onclick="this.parentNode.parentNode.remove(); actualizarContadores();">Eliminar</button></td>
+                <td><button class="btn btn-danger" onclick="this.parentNode.parentNode.remove(); actualizarContadores(); guardarTabla();">Eliminar</button></td>
             `;
 
-            // Reiniciamos el campo de entrada
+            guardarTabla();
+
             document.getElementById("captura").value = "";
             document.getElementById("captura1").value = "";
             document.getElementById("captura2").value = "";
             document.getElementById("captura").focus();
+        }
+
+        function guardarTabla() {
+            const tablaBody = document.getElementById("tabla").getElementsByTagName('tbody')[0].innerHTML;
+            localStorage.setItem('tablaData', JSON.stringify(tablaBody));
+        }
+
+        window.onload = function() {
+            let storedData = localStorage.getItem('tablaData');
+            if (storedData) {
+                document.getElementById("tabla").getElementsByTagName('tbody')[0].innerHTML = JSON.parse(storedData);
+                contador = document.querySelectorAll("#tabla tbody tr").length + 1;
+                agregarEventosEliminar();
+            }
         }
 
         function actualizarContadores() {
@@ -96,14 +137,24 @@
             });
         }
 
+        function agregarEventosEliminar() {
+            const botonesEliminar = document.querySelectorAll('#tabla .btn-danger');
+            botonesEliminar.forEach(boton => {
+                boton.onclick = function() {
+                    this.parentNode.parentNode.remove();
+                    actualizarContadores();
+                    guardarTabla();
+                };
+            });
+        }
+
         window.onbeforeunload = function(event) {
-            return "¿segurolas que quieres salir?";
+            return "¿Seguro que quieres salir?";
         }
     </script>
-    <!-- Enlaces de Bootstrap JS y jQuery -->
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
 
     <script>
         if ('serviceWorker' in navigator) {
@@ -112,8 +163,6 @@
                 .catch(error => console.error('Error al registrar Service Worker:', error));
         }
     </script>
-    
-
 
 </body>
 </html>
