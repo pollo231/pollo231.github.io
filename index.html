@@ -36,6 +36,15 @@
             padding: 20px;
             background-color: rgba(0, 123, 255, 0.8); /* Fondo azul semi-transparente */
             color: white;
+            word-wrap: break-word; /* Esto permite que el título se ajuste */
+        }
+
+        /* Ajustes para pantallas pequeñas */
+        @media (max-width: 576px) {
+            .titulo-consistente {
+                font-size: 1.5rem; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+                padding: 10px; /* Reduce el padding */
+            }
         }
 
         .content {
