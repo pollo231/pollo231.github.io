@@ -1,47 +1,49 @@
-const CACHE_NAME = 'tabla-html-cache-v2';
-const urlsToCache = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/goyo1.jpg',
-    'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css',
-    'https://code.jquery.com/jquery-3.5.1.slim.min.js',
-    'https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js'
+importScripts('cache-polyfill.js');
+
+let CACHE_VERSION = 'app-v0.00';
+// give all files path you want to work offline
+let CACHE_FILES = [
+  './',
+  'index.html',
+  'cache-polyfill.js',
+  'script.js',
+  'imagen1.png',
+  'icon-144.png',
+  'imagen2.png',
 ];
 
-// Instala el Service Worker y almacena en caché los recursos
-self.addEventListener('install', (event) => {
+self.addEventListener('install', function (event) {
+    self.skipWaiting();
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
+        caches.open(CACHE_VERSION)
+            .then(function (cache) {
+                console.log('Opened cache');
+                return cache.addAll(CACHE_FILES);
             })
-    );
-});
+    )
+})
 
-// Intercepta las solicitudes de red y responde con caché si está disponible
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                return response || fetch(event.request);
+self.addEventListener('fetch', function (event) {
+    let online = navigator.onLine
+    if (!online) {
+        event.respondWith(
+            caches.match(event.request).then(function (res) {
+                if (res) {
+                    return res;
+                }
             })
-    );
-});
+        )
+    }
+})
 
-// Actualiza el caché cuando el contenido cambia
-self.addEventListener('activate', (event) => {
-    const cacheWhitelist = [CACHE_NAME];
+self.addEventListener('activate', function(event){
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (!cacheWhitelist.includes(cacheName)) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
+        caches.keys().then(function(keys){
+            return prompt.all(keys.map(function(keys, i){
+                if(keys !== CACHE_VERSION){
+                    return caches.delete(keys[i]);
+                }
+            }))
         })
-    );
-});
-
+    )
+})
