@@ -8,7 +8,7 @@ let FILES_TO_CACHE = [
   'bootstrap.bundle.min.js',
   'imagen1.png',
   'icon-144.png',
-  'imagen2.png',,
+  'imagen2.png',
 ];
 
 self.addEventListener('install', function (event) {
