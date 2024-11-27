@@ -1,14 +1,14 @@
-let CACHE_VERSION = 'app-v0.7';
+let CACHE_VERSION = 'app-v0.9';
 let FILES_TO_CACHE = [
     './',
-  'index.html',
-  'cache-polyfill.js',
-  'style.css',
-  'script.js',
-  'bootstrap.bundle.min.js',
-  'imagen1.png',
-  'icon-144.png',
-  'imagen2.png',
+  './index.html',
+  './cache-polyfill.js',
+  './style.css',
+  './script.js',
+  './bootstrap.bundle.min.js',
+  './imagen1.png',
+  './icon-144.png',
+  './imagen2.png',
 ];
 
 self.addEventListener('install', function (event) {
